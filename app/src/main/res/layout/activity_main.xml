@@ -10,7 +10,7 @@
         android:id="@+id/hello_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello, NoteFlow!"
+        android:text="@string/hello_text"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp" />
@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to your note-taking app"
+        android:text="@string/welcome_text"
         android:textSize="16sp"
         android:gravity="center" />
 
