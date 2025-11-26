@@ -2,4 +2,21 @@
     <string name="app_name">NoteFlow</string>
     <string name="hello_text">Hello, NoteFlow!</string>
     <string name="welcome_text">Welcome to your note-taking app</string>
+    <string name="menu_title">Menu</string>
+    <string name="article_category">文章分类</string>
+    <string name="new_article">新建文章</string>
+    <string name="delete_article">删除文章</string>
+    <string name="first_article_title">我的第一篇文章</string>
+    <string name="first_article_preview">这是文章的预览内容，用来展示文章的主要信息...</string>
+    <string name="learning_notes_title">学习笔记</string>
+    <string name="learning_notes_preview">今天学习了Android开发的基础知识，收获很大...</string>
+    <string name="life_reflection_title">生活感悟</string>
+    <string name="life_reflection_preview">生活中有很多值得记录的瞬间，记录下来...</string>
+    <string name="tech_share_title">技术分享</string>
+    <string name="tech_share_preview">分享一些关于Android开发的心得体会...</string>
+    <string name="travel_diary_title">旅行日记</string>
+    <string name="travel_diary_preview">这次旅行让我收获了很多美好的回忆...</string>
+    <string name="user_avatar_desc">用户头像</string>
+    <string name="add_article_desc">新建文章</string>
+    <string name="menu_button_desc">菜单</string>
 </resources>
