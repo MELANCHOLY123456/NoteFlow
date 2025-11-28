@@ -2,21 +2,28 @@
     <string name="app_name">NoteFlow</string>
     <string name="hello_text">Hello, NoteFlow!</string>
     <string name="welcome_text">Welcome to your note-taking app</string>
+    <string name="welcome_message">欢迎使用 NoteFlow</string>
     <string name="menu_title">Menu</string>
     <string name="article_category">文章分类</string>
     <string name="new_article">新建文章</string>
     <string name="delete_article">删除文章</string>
-    <string name="first_article_title">我的第一篇文章</string>
-    <string name="first_article_preview">这是文章的预览内容，用来展示文章的主要信息...</string>
-    <string name="learning_notes_title">学习笔记</string>
-    <string name="learning_notes_preview">今天学习了Android开发的基础知识，收获很大...</string>
-    <string name="life_reflection_title">生活感悟</string>
-    <string name="life_reflection_preview">生活中有很多值得记录的瞬间，记录下来...</string>
-    <string name="tech_share_title">技术分享</string>
-    <string name="tech_share_preview">分享一些关于Android开发的心得体会...</string>
-    <string name="travel_diary_title">旅行日记</string>
-    <string name="travel_diary_preview">这次旅行让我收获了很多美好的回忆...</string>
+    <string name="first_article_title">编译器设计原理</string>
+    <string name="first_article_preview">深入探讨编译器的前端和后端设计，包括词法分析、语法分析、语义分析、中间代码生成、代码优化和目标代码生成等核心模块…</string>
+    <string name="learning_notes_title">MIPS指令集架构解析</string>
+    <string name="learning_notes_preview">详细介绍MIPS架构的基本特征、指令格式、寻址方式，以及其在计算机体系结构中的应用和重要性…</string>
+    <string name="life_reflection_title">指令级并行技术综述</string>
+    <string name="life_reflection_preview">探讨指令级并行（ILP）技术，包括超标量、超流水线、分支预测等实现方法，以及其在现代处理器中的应用…</string>
+    <string name="tech_share_title">操作系统内存管理机制</string>
+    <string name="tech_share_preview">分析操作系统的内存管理机制，包括分页、分段、虚拟内存、页面置换算法等核心概念和实现原理…</string>
+    <string name="travel_diary_title">计算机网络协议栈分析</string>
+    <string name="travel_diary_preview">深入分析TCP/IP协议栈的各层功能，包括物理层、数据链路层、网络层、传输层和应用层的协议设计与实现…</string>
     <string name="user_avatar_desc">用户头像</string>
     <string name="add_article_desc">新建文章</string>
     <string name="menu_button_desc">菜单</string>
+    <string name="user_name">NoteFlow User</string>
+    <string name="quote_of_the_day">一日不见，如隔秋水</string>
+    <string name="back">返回主界面</string>
+    <string name="topic">文章标题</string>
+
+
 </resources>
