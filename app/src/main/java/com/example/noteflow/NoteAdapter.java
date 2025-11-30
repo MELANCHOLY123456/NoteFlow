@@ -1,5 +1,6 @@
 package com.example.noteflow;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -72,12 +73,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             String line = lines[0];
             if (line != null && line.length() < 30) {
                 // 如果内容太短，创建一个长字符串以确保显示两行
-                String repeated = line;
+                StringBuilder repeated = new StringBuilder(line);
                 while (repeated.length() < 60) {  // 确保至少60个字符，足够显示两行
-                    repeated += " " + line;
+                    repeated.append(" ").append(line);
                 }
                 if (repeated.length() > 120) {
-                    repeated = repeated.substring(0, 120);
+                    repeated = new StringBuilder(repeated.substring(0, 120));
                 }
                 // 将内容分成两部分，确保每部分都有足够的字符显示
                 int splitPoint = Math.max(25, repeated.length() / 2); // 至少25个字符为第一行
@@ -89,6 +90,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
                 return part1 + "\n" + part2;
             } else {
                 // 如果内容足够长，分成两部分
+                assert line != null;
                 int splitPoint = Math.max(25, line.length() / 2);
                 String part1 = line.substring(0, splitPoint);
                 String part2 = line.substring(splitPoint);
@@ -104,6 +106,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         return notes.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void updateNotes(List<Note> newNotes) {
         this.notes = newNotes;
         notifyDataSetChanged();

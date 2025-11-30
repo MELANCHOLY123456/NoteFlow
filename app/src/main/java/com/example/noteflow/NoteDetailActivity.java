@@ -1,13 +1,17 @@
 package com.example.noteflow;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.Objects;
+
 public class NoteDetailActivity extends AppCompatActivity {
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +36,9 @@ public class NoteDetailActivity extends AppCompatActivity {
         if (timestamp != null) {
             articleTimestamp.setText(timestamp);
         }
-        if (content != null) {
-            articleContent.setText(content);
-        } else {
-            // 如果没有传入内容，提供一个默认内容
-            articleContent.setText("这里是 " + (title != null ? title : "这篇文章") + " 的详细内容。");
-        }
+
+        // 如果没有传入内容，提供一个默认内容
+        articleContent.setText(Objects.requireNonNullElseGet(content, () -> "这里是 " + (title != null ? title : "这篇文章") + " 的详细内容。"));
 
         // 设置返回按钮点击事件
         backButton.setOnClickListener(v -> finish());
