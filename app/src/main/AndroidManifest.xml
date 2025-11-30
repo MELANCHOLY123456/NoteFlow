@@ -24,6 +24,10 @@
         <activity
             android:name=".NoteDetailActivity"
             android:exported="false" />
+        
+        <activity
+            android:name=".NewNoteActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -19,6 +19,7 @@ public class NoteDetailActivity extends AppCompatActivity {
 
         // 初始化视图
         ImageButton backButton = findViewById(R.id.back_button);
+        ImageButton editButton = findViewById(R.id.edit_note_button);
         TextView articleTitle = findViewById(R.id.article_title);
         TextView articleTimestamp = findViewById(R.id.article_timestamp);
         TextView articleContent = findViewById(R.id.article_content);
@@ -28,6 +29,7 @@ public class NoteDetailActivity extends AppCompatActivity {
         String title = intent.getStringExtra("title");
         String timestamp = intent.getStringExtra("timestamp");
         String content = intent.getStringExtra("content");
+        int noteId = intent.getIntExtra("id", -1); // 获取笔记ID
 
         // 设置数据到视图
         if (title != null) {
@@ -42,5 +44,17 @@ public class NoteDetailActivity extends AppCompatActivity {
 
         // 设置返回按钮点击事件
         backButton.setOnClickListener(v -> finish());
+
+        // 设置编辑按钮点击事件
+        editButton.setOnClickListener(v -> {
+            // 跳转到编辑笔记界面
+            Intent editIntent = new Intent(NoteDetailActivity.this, NewNoteActivity.class);
+            editIntent.putExtra("id", noteId); // 传递笔记ID用于更新
+            editIntent.putExtra("title", title);
+            editIntent.putExtra("content", content);
+            editIntent.putExtra("editMode", true); // 标识是编辑模式
+            startActivity(editIntent);
+            finish(); // 关闭当前详情页
+        });
     }
 }

@@ -1,5 +1,6 @@
 package com.example.noteflow;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -58,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         addArticleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "新建文章", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -141,5 +143,11 @@ public class MainActivity extends AppCompatActivity {
         // 根据日期选择不同的名言
         int quoteIndex = (day - 1) % quotes.length;
         quoteTextView.setText(quotes[quoteIndex]);
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadNotesFromDatabase(); // 每次返回主界面时重新加载笔记
     }
 }

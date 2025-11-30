@@ -159,7 +159,7 @@
                 android:layout_height="100dp"
                 android:src="@drawable/ic_launcher_foreground"
                 android:scaleType="centerCrop"
-                android:background="@drawable/circle_mask"
+                android:background="@drawable/circle_mask_transparent"
                 android:padding="4dp"
                 android:contentDescription="@string/user_avatar_desc" />
 

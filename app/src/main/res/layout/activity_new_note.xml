@@ -20,34 +20,46 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 文章标题 -->
-            <TextView
-                android:id="@+id/article_title"
+            <!-- 文章标题输入 -->
+            <EditText
+                android:id="@+id/note_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/topic"
+                android:hint="请输入文章标题"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
-                android:layout_marginBottom="16dp" />
+                android:background="@android:color/transparent"
+                android:paddingBottom="16dp"
+                android:inputType="text"
+                android:maxLength="100" />
 
-            <!-- 时间戳 -->
+            <!-- 时间戳显示 -->
             <TextView
-                android:id="@+id/article_timestamp"
+                android:id="@+id/note_timestamp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
 
-            <!-- 文章内容 -->
-            <TextView
-                android:id="@+id/article_content"
+            <!-- 文章内容输入 -->
+            <EditText
+                android:id="@+id/note_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="300dp"
+                android:hint="请输入文章内容..."
                 android:textSize="16sp"
                 android:textColor="@android:color/black"
-                android:lineSpacingExtra="4dp" />
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:paddingTop="8dp"
+                android:inputType="textMultiLine|textCapSentences"
+                android:scrollbars="vertical"
+                android:scrollHorizontally="false"
+                android:isScrollContainer="true" />
 
         </LinearLayout>
 
@@ -69,12 +81,11 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/circle_mask_transparent"
-            android:contentDescription="@string/back"
+            android:contentDescription="返回"
             android:padding="8dp"
             android:rotation="0"
             android:scaleType="centerInside"
-            android:src="@drawable/back"
-            tools:ignore="ImageContrastCheck" />
+            android:src="@drawable/back" />
 
         <!-- 用于填充的视图 -->
         <View
@@ -82,17 +93,17 @@
             android:layout_height="1dp"
             android:layout_weight="1" />
 
-        <!-- 编辑按钮 -->
+        <!-- 保存按钮 -->
         <ImageButton
-            android:id="@+id/edit_note_button"
+            android:id="@+id/save_note_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/circle_mask_transparent"
-            android:contentDescription="编辑文章"
+            android:contentDescription="保存"
             android:padding="8dp"
             android:rotation="0"
             android:scaleType="centerInside"
-            android:src="@drawable/add"
+            android:src="@drawable/save"
             android:layout_marginStart="8dp" />
 
     </LinearLayout>

@@ -43,6 +43,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         // 设置点击事件
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, NoteDetailActivity.class);
+            intent.putExtra("id", note.getId());
             intent.putExtra("title", note.getTitle());
             intent.putExtra("timestamp", note.getTimestamp());
             intent.putExtra("content", note.getContent());
@@ -50,10 +51,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         });
     }
     
-    // 确保返回的内容至少包含两行（用换行符分隔）
+    // 获取内容的前两行，不重复内容
     private String getFirstTwoLines(String content) {
         if (content == null || content.isEmpty()) {
-            return "空白内容\n第二行"; // 返回两行确保显示
+            return "空白内容\n";
         }
         
         // 如果内容中包含换行符，取前两行
@@ -65,39 +66,19 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             if (lines[1] != null) {
                 result += "\n" + lines[1];
             } else {
-                result += "\n第二行";
+                result += "\n";
             }
             return result;
         } else if (lines.length == 1) {
-            // 如果只有一行，确保这行内容足够长以填满两行显示
+            // 如果只有一行，直接返回该行和一个空行，不重复内容
             String line = lines[0];
-            if (line != null && line.length() < 30) {
-                // 如果内容太短，创建一个长字符串以确保显示两行
-                StringBuilder repeated = new StringBuilder(line);
-                while (repeated.length() < 60) {  // 确保至少60个字符，足够显示两行
-                    repeated.append(" ").append(line);
-                }
-                if (repeated.length() > 120) {
-                    repeated = new StringBuilder(repeated.substring(0, 120));
-                }
-                // 将内容分成两部分，确保每部分都有足够的字符显示
-                int splitPoint = Math.max(25, repeated.length() / 2); // 至少25个字符为第一行
-                if (splitPoint >= repeated.length()) {
-                    return repeated + "\n填充内容";
-                }
-                String part1 = repeated.substring(0, splitPoint);
-                String part2 = repeated.substring(splitPoint);
-                return part1 + "\n" + part2;
+            if (line != null) {
+                return line + "\n";
             } else {
-                // 如果内容足够长，分成两部分
-                assert line != null;
-                int splitPoint = Math.max(25, line.length() / 2);
-                String part1 = line.substring(0, splitPoint);
-                String part2 = line.substring(splitPoint);
-                return part1 + "\n" + part2;
+                return "\n";
             }
         } else {
-            return "第一行\n第二行"; // 确保返回两行格式
+            return "\n"; // 返回空行
         }
     }
 
