@@ -139,7 +139,7 @@
         android:layout_width="280dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#F5F5F5"
+        android:background="@android:color/white"
         android:orientation="vertical"
         android:elevation="16dp">
 
@@ -151,7 +151,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:padding="20dp"
-            android:background="#F5F5F5">
+            android:background="@android:color/white">
 
             <ImageView
                 android:id="@+id/user_avatar"
@@ -162,8 +162,7 @@
                 android:background="@drawable/circle_mask_transparent"
                 android:outlineProvider="background"
                 android:clipToOutline="true"
-                android:contentDescription="@string/user_avatar_desc"
-                tools:targetApi="31" />
+                android:contentDescription="@string/user_avatar_desc" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -182,7 +181,7 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:orientation="vertical"
-            android:background="#F5F5F5">
+            android:background="@android:color/white">
         </LinearLayout>
 
     </LinearLayout>

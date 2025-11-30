@@ -3,10 +3,8 @@ package com.example.noteflow;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,8 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // 设置侧滑菜单按钮点击事件
-        setupDrawerButtons();
+        
     }
 
     private void setupNotesList() {
@@ -89,26 +86,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void setupDrawerButtons() {
-        Button btnCategory = findViewById(R.id.btn_category);
-        Button btnDeleteArticle = findViewById(R.id.btn_delete_article);
-
-        btnCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "文章分类", Toast.LENGTH_SHORT).show();
-                drawerLayout.closeDrawers();
-            }
-        });
-
-        btnDeleteArticle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "删除文章", Toast.LENGTH_SHORT).show();
-                drawerLayout.closeDrawers();
-            }
-        });
-    }
+    
     
     private void updateDateDisplay() {
         Calendar calendar = Calendar.getInstance();
