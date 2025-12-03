@@ -1,5 +1,6 @@
 package com.example.noteflow;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -161,14 +162,14 @@ public class NewNoteActivity extends AppCompatActivity {
             return;
         }
 
-        // 创建输入框
-        EditText input = new EditText(this);
-        input.setHint("输入标签名称");
+        // 创建自定义对话框布局
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_tag, null);
+        EditText input = dialogView.findViewById(R.id.tag_input);
 
         // 创建对话框
         new AlertDialog.Builder(this)
                 .setTitle("添加标签")
-                .setView(input)
+                .setView(dialogView)
                 .setPositiveButton("确定", (dialog, which) -> {
                     String tagName = input.getText().toString().trim();
                     if (!TextUtils.isEmpty(tagName)) {
@@ -226,10 +227,16 @@ public class NewNoteActivity extends AppCompatActivity {
         }).start();
     }
 
+    @SuppressLint("SetTextI18n")
     private void showRemoveTagDialog(Tag tagToRemove) {
+        // 创建自定义对话框布局
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirm_remove_tag, null);
+        TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+        messageTextView.setText("确定要删除标签 \"" + tagToRemove.getTagName() + "\" 吗？");
+
         new AlertDialog.Builder(this)
                 .setTitle("删除标签")
-                .setMessage("确定要删除标签 \"" + tagToRemove.getTagName() + "\" 吗？")
+                .setView(dialogView)
                 .setPositiveButton("确定", (dialog, which) -> removeTagFromNote(tagToRemove))
                 .setNegativeButton("取消", null)
                 .show();
@@ -310,27 +317,52 @@ public class NewNoteActivity extends AppCompatActivity {
         String currentTitle = titleEditText.getText().toString();
         String currentContent = contentEditText.getText().toString();
         
-        boolean hasChanges = false;
         if (isEditMode) {
             // 在编辑模式下，需要获取原始内容进行比较
-            // 由于我们从数据库加载了最新内容，我们需要在初始化时保存原始内容
-            checkForChangesAndShowDialog(currentTitle, currentContent);
+            // 从数据库获取当前存储的值进行比较
+            new Thread(() -> {
+                Note originalNote = database.noteDao().getNoteById(noteId);
+                if (originalNote != null) {
+                    boolean hasChanges = !Objects.equals(currentTitle, originalNote.getTitle()) || 
+                                       !Objects.equals(currentContent, originalNote.getContent());
+                    
+                    runOnUiThread(() -> showSaveConfirmationDialogWithMessage(hasChanges ? "是否保存修改？" : "没有检测到修改，是否直接返回？", hasChanges));
+                } else {
+                    runOnUiThread(() -> {
+                        // 如果找不到原始笔记，询问是否保存当前内容
+                        showSaveConfirmationDialogWithMessage("原始笔记不存在，是否保存当前内容？", true);
+                    });
+                }
+            }).start();
         } else {
             // 在新建模式下，检查是否输入了内容
-            if (!TextUtils.isEmpty(currentTitle) || !TextUtils.isEmpty(currentContent)) {
-                hasChanges = true;
-            }
+            boolean hasChanges = !TextUtils.isEmpty(currentTitle) || !TextUtils.isEmpty(currentContent);
             
-            // 总是显示是否保存的对话框
-            String message = hasChanges ? "是否保存内容？" : "没有输入内容，是否直接返回？";
-            new AlertDialog.Builder(this)
-                    .setTitle("保存内容")
-                    .setMessage(message)
-                    .setPositiveButton("保存", (dialog, which) -> saveNote())
-                    .setNegativeButton("不保存", (dialog, which) -> finish())
-                    .setNeutralButton("取消", null)
-                    .show();
+            showSaveConfirmationDialogWithMessage(hasChanges ? "是否保存内容？" : "没有输入内容，是否直接返回？", hasChanges);
         }
+    }
+    
+    // 显示带有自定义消息的保存确认对话框
+    private void showSaveConfirmationDialogWithMessage(String message, boolean canSave) {
+        // 创建自定义对话框布局
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirm_save, null);
+        TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+        messageTextView.setText(message);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle("保存内容")
+                .setView(dialogView);
+        
+        if (canSave) {
+            builder.setPositiveButton("保存", (dialog, which) -> saveNote())
+                   .setNegativeButton("不保存", (dialog, which) -> finish())
+                   .setNeutralButton("取消", null);
+        } else {
+            builder.setPositiveButton("返回", (dialog, which) -> finish())
+                   .setNegativeButton("继续编辑", null);
+        }
+        
+        builder.show();
     }
     
     // 在编辑模式下检查是否有变化并显示对话框

@@ -150,14 +150,14 @@ public class NoteDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // 创建输入框
-        EditText input = new EditText(this);
-        input.setHint("输入标签名称");
+        // 创建自定义对话框布局
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_tag, null);
+        EditText input = dialogView.findViewById(R.id.tag_input);
 
         // 创建对话框
         new AlertDialog.Builder(this)
                 .setTitle("添加标签")
-                .setView(input)
+                .setView(dialogView)
                 .setPositiveButton("确定", (dialog, which) -> {
                     String tagName = input.getText().toString().trim();
                     if (!TextUtils.isEmpty(tagName)) {
@@ -224,9 +224,14 @@ public class NoteDetailActivity extends AppCompatActivity {
     
     // 显示删除确认对话框
     private void showDeleteConfirmationDialog() {
+        // 创建自定义对话框布局
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirm_remove_tag, null);
+        TextView messageTextView = dialogView.findViewById(R.id.dialog_message);
+        messageTextView.setText("确定要删除这篇文章吗？此操作不可撤销。");
+
         new AlertDialog.Builder(this)
                 .setTitle("删除文章")
-                .setMessage("确定要删除这篇文章吗？此操作不可撤销。")
+                .setView(dialogView)
                 .setPositiveButton("确定", (dialog, which) -> deleteNote())
                 .setNegativeButton("取消", null)
                 .show();

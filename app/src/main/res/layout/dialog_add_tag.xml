@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="输入标签名称"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="12dp" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tag_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="例如：工作、生活、学习"
+        android:padding="16dp"
+        android:background="@drawable/edit_text_border"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+</LinearLayout>
