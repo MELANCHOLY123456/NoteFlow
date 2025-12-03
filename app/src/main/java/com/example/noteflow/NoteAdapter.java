@@ -3,20 +3,24 @@ package com.example.noteflow;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
-    private List<Note> notes;
+    private List<NoteWithTags> notesWithTags;
     private Context context;
 
-    public NoteAdapter(List<Note> notes, Context context) {
-        this.notes = notes;
+    public NoteAdapter(List<NoteWithTags> notesWithTags, Context context) {
+        this.notesWithTags = notesWithTags;
         this.context = context;
     }
 
@@ -30,7 +34,9 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        Note note = notes.get(position);
+        NoteWithTags noteWithTags = notesWithTags.get(position);
+        Note note = noteWithTags.note;
+        
         holder.titleTextView.setText(note.getTitle());
         
         // 显示正文的前两行
@@ -39,6 +45,35 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         holder.previewTextView.setText(firstTwoLines);
         
         holder.timestampTextView.setText(note.getTimestamp());
+        
+        // 清除之前的标签
+        holder.tagsContainer.removeAllViews();
+        
+        // 添加标签
+        if (noteWithTags.tags != null && !noteWithTags.tags.isEmpty()) {
+            for (Tag tag : noteWithTags.tags) {
+                // 创建标签视图
+                TextView tagView = new TextView(context);
+                tagView.setText(tag.getTagName());
+                tagView.setTextSize(10);
+                tagView.setPadding(12, 6, 12, 6);
+                tagView.setTextColor(Color.WHITE);
+                
+                // 设置背景为圆角矩形
+                tagView.setBackground(createTagBackground());
+                
+                // 添加边距
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(4, 0, 4, 0);
+                tagView.setLayoutParams(params);
+                
+                // 添加到容器
+                holder.tagsContainer.addView(tagView);
+            }
+        }
         
         // 设置点击事件
         holder.itemView.setOnClickListener(v -> {
@@ -49,6 +84,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             intent.putExtra("content", note.getContent());
             context.startActivity(intent);
         });
+    }
+    
+    // 创建标签背景
+    private android.graphics.drawable.Drawable createTagBackground() {
+        android.graphics.drawable.GradientDrawable drawable = new android.graphics.drawable.GradientDrawable();
+        drawable.setColor(context.getResources().getColor(android.R.color.holo_blue_light));
+        drawable.setCornerRadius(20f); // 设置圆角半径
+        return drawable;
     }
     
     // 获取内容的前两行，不重复内容
@@ -84,12 +127,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
     @Override
     public int getItemCount() {
-        return notes.size();
+        return notesWithTags.size();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void updateNotes(List<Note> newNotes) {
-        this.notes = newNotes;
+    public void updateNotes(List<NoteWithTags> newNotesWithTags) {
+        this.notesWithTags = newNotesWithTags;
         notifyDataSetChanged();
     }
 
@@ -97,12 +140,14 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         TextView titleTextView;
         TextView previewTextView;
         TextView timestampTextView;
+        LinearLayout tagsContainer;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.note_title);
             previewTextView = itemView.findViewById(R.id.note_preview);
             timestampTextView = itemView.findViewById(R.id.note_timestamp);
+            tagsContainer = itemView.findViewById(R.id.tags_container);
         }
     }
 }

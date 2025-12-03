@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
     private void loadNotesFromDatabase() {
         // 在后台线程中执行数据库操作
         new Thread(() -> {
-            List<Note> notes = database.noteDao().getAllNotes();
+            List<NoteWithTags> notesWithTags = database.noteDao().getAllNotesWithTags();
             runOnUiThread(() -> {
-                noteAdapter.updateNotes(notes);
+                noteAdapter.updateNotes(notesWithTags);
             });
         }).start();
     }

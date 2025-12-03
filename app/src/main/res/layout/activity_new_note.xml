@@ -44,6 +44,30 @@
                 android:layout_marginBottom="16dp"
                 android:visibility="gone" />
 
+            <!-- 标签容器 -->
+            <LinearLayout
+                android:id="@+id/tags_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/tags_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" />
+
+                </HorizontalScrollView>
+
+            </LinearLayout>
+
             <!-- 文章内容输入 -->
             <EditText
                 android:id="@+id/note_content"
@@ -92,6 +116,19 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1" />
+
+        <!-- 添加标签按钮 -->
+        <ImageButton
+            android:id="@+id/add_tag_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/circle_mask_transparent"
+            android:contentDescription="添加标签"
+            android:padding="8dp"
+            android:rotation="0"
+            android:scaleType="centerInside"
+            android:src="@drawable/tag"
+            android:layout_marginStart="8dp" />
 
         <!-- 保存按钮 -->
         <ImageButton

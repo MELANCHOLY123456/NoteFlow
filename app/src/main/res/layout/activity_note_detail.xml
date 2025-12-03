@@ -38,7 +38,16 @@
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@android:color/darker_gray"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="16dp" />
+
+            <!-- 标签容器 -->
+            <LinearLayout
+                android:id="@+id/tags_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
 
             <!-- 文章内容 -->
             <TextView
@@ -81,6 +90,19 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1" />
+
+        <!-- 添加标签按钮 -->
+        <ImageButton
+            android:id="@+id/add_tag_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/circle_mask_transparent"
+            android:contentDescription="添加标签"
+            android:padding="8dp"
+            android:rotation="0"
+            android:scaleType="centerInside"
+            android:src="@drawable/tag"
+            android:layout_marginStart="8dp" />
 
         <!-- 编辑按钮 -->
         <ImageButton

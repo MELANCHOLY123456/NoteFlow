@@ -55,15 +55,31 @@
 
             <TextView
                 android:id="@+id/note_timestamp"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text="2025-01-01"
                 android:textSize="11sp"
                 android:textColor="?attr/colorPrimary"
                 android:drawableStart="@drawable/time_icon"
                 android:drawablePadding="3dp"
                 android:gravity="center_vertical" />
+
+            <HorizontalScrollView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:scrollbars="none"
+                android:layout_gravity="center_vertical">
+
+                <LinearLayout
+                    android:id="@+id/tags_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical" />
+
+            </HorizontalScrollView>
 
         </LinearLayout>
 
