@@ -112,6 +112,7 @@ public class NoteDetailActivity extends AppCompatActivity {
                         params.setMargins(0, 0, 8, 8);
                         tagView.setLayoutParams(params);
                         
+                        // 不添加点击事件，只用于展示标签
                         // 添加到容器
                         tagsContainer.addView(tagView);
                     }
@@ -125,6 +126,8 @@ public class NoteDetailActivity extends AppCompatActivity {
             });
         }).start();
     }
+    
+    
     
     // 创建标签背景
     private android.graphics.drawable.Drawable createTagBackground() {

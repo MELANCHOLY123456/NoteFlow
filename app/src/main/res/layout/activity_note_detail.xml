@@ -31,15 +31,6 @@
                 android:textColor="@android:color/black"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 时间戳 -->
-            <TextView
-                android:id="@+id/article_timestamp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="@android:color/darker_gray"
-                android:layout_marginBottom="16dp" />
-
             <!-- 标签容器 -->
             <LinearLayout
                 android:id="@+id/tags_container"
@@ -48,6 +39,15 @@
                 android:orientation="horizontal"
                 android:layout_marginBottom="16dp"
                 android:visibility="gone" />
+
+            <!-- 时间戳 -->
+            <TextView
+                android:id="@+id/article_timestamp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginBottom="16dp" />
 
             <!-- 文章内容 -->
             <TextView
