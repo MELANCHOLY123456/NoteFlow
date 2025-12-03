@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class NewNoteActivity extends AppCompatActivity {
 
@@ -67,12 +68,22 @@ public class NewNoteActivity extends AppCompatActivity {
         noteId = intent.getIntExtra("id", -1);
         
         if (isEditMode) {
-            String title = intent.getStringExtra("title");
-            String content = intent.getStringExtra("content");
-            
-            titleEditText.setText(title);
-            contentEditText.setText(content);
+            // 在编辑模式下，从数据库加载最新的笔记数据
+            loadNoteFromDatabase();
         }
+    }
+    
+    // 从数据库加载笔记数据
+    private void loadNoteFromDatabase() {
+        new Thread(() -> {
+            Note note = database.noteDao().getNoteById(noteId);
+            if (note != null) {
+                runOnUiThread(() -> {
+                    titleEditText.setText(note.getTitle());
+                    contentEditText.setText(note.getContent());
+                });
+            }
+        }).start();
     }
 
     private void setupViewsForEditMode() {
@@ -84,7 +95,7 @@ public class NewNoteActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         saveButton.setOnClickListener(v -> saveNote());
-        backButton.setOnClickListener(v -> finish());
+        backButton.setOnClickListener(v -> showSaveConfirmationDialog());
         if (addTagButton != null) {
             addTagButton.setOnClickListener(v -> showAddTagDialog());
         }
@@ -95,9 +106,7 @@ public class NewNoteActivity extends AppCompatActivity {
         
         new Thread(() -> {
             List<Tag> tags = database.noteDao().getTagsForNote(noteId);
-            runOnUiThread(() -> {
-                updateTagsView(tags);
-            });
+            runOnUiThread(() -> updateTagsView(tags));
         }).start();
     }
 
@@ -208,15 +217,11 @@ public class NewNoteActivity extends AppCompatActivity {
                         loadNoteTags(); // 重新加载标签
                     });
                 } else {
-                    runOnUiThread(() -> {
-                        Toast.makeText(NewNoteActivity.this, "标签已存在", Toast.LENGTH_SHORT).show();
-                    });
+                    runOnUiThread(() -> Toast.makeText(NewNoteActivity.this, "标签已存在", Toast.LENGTH_SHORT).show());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                runOnUiThread(() -> {
-                    Toast.makeText(NewNoteActivity.this, "添加标签失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                runOnUiThread(() -> Toast.makeText(NewNoteActivity.this, "添加标签失败: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
@@ -243,9 +248,7 @@ public class NewNoteActivity extends AppCompatActivity {
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                runOnUiThread(() -> {
-                    Toast.makeText(NewNoteActivity.this, "删除标签失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                runOnUiThread(() -> Toast.makeText(NewNoteActivity.this, "删除标签失败: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
@@ -281,13 +284,87 @@ public class NewNoteActivity extends AppCompatActivity {
                 db.noteDao().updateNote(note); // 更新笔记
                 runOnUiThread(() -> {
                     Toast.makeText(NewNoteActivity.this, "文章修改成功", Toast.LENGTH_SHORT).show();
+                    // 设置结果并返回
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("note_updated", true);
+                    setResult(RESULT_OK, resultIntent);
                     finish(); // 修改成功后返回
                 });
             } else {
                 db.noteDao().insertNote(note); // 插入新笔记
                 runOnUiThread(() -> {
                     Toast.makeText(NewNoteActivity.this, "文章保存成功", Toast.LENGTH_SHORT).show();
+                    // 设置结果并返回
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("note_updated", true);
+                    setResult(RESULT_OK, resultIntent);
                     finish(); // 保存成功后返回主页面
+                });
+            }
+        }).start();
+    }
+    
+    // 显示保存确认对话框
+    private void showSaveConfirmationDialog() {
+        // 检查是否有修改
+        String currentTitle = titleEditText.getText().toString();
+        String currentContent = contentEditText.getText().toString();
+        
+        boolean hasChanges = false;
+        if (isEditMode) {
+            // 在编辑模式下，需要获取原始内容进行比较
+            // 由于我们从数据库加载了最新内容，我们需要在初始化时保存原始内容
+            checkForChangesAndShowDialog(currentTitle, currentContent);
+        } else {
+            // 在新建模式下，检查是否输入了内容
+            if (!TextUtils.isEmpty(currentTitle) || !TextUtils.isEmpty(currentContent)) {
+                hasChanges = true;
+            }
+            
+            // 总是显示是否保存的对话框
+            String message = hasChanges ? "是否保存内容？" : "没有输入内容，是否直接返回？";
+            new AlertDialog.Builder(this)
+                    .setTitle("保存内容")
+                    .setMessage(message)
+                    .setPositiveButton("保存", (dialog, which) -> saveNote())
+                    .setNegativeButton("不保存", (dialog, which) -> finish())
+                    .setNeutralButton("取消", null)
+                    .show();
+        }
+    }
+    
+    // 在编辑模式下检查是否有变化并显示对话框
+    private void checkForChangesAndShowDialog(String currentTitle, String currentContent) {
+        // 由于我们已经从数据库加载了最新数据作为初始值，
+        // 我们需要在加载数据之前保存原始数据，但现在我们重新设计逻辑
+        // 从数据库获取当前存储的值进行比较
+        new Thread(() -> {
+            Note originalNote = database.noteDao().getNoteById(noteId);
+            if (originalNote != null) {
+                boolean hasChanges = !Objects.equals(currentTitle, originalNote.getTitle()) || 
+                                   !Objects.equals(currentContent, originalNote.getContent());
+                
+                runOnUiThread(() -> {
+                    // 总是显示是否保存的对话框
+                    String message = hasChanges ? "是否保存修改？" : "没有检测到修改，是否直接返回？";
+                    new AlertDialog.Builder(this)
+                            .setTitle("保存内容")
+                            .setMessage(message)
+                            .setPositiveButton("保存", (dialog, which) -> saveNote())
+                            .setNegativeButton("不保存", (dialog, which) -> finish())
+                            .setNeutralButton("取消", null)
+                            .show();
+                });
+            } else {
+                runOnUiThread(() -> {
+                    // 如果找不到原始笔记，询问是否保存当前内容
+                    new AlertDialog.Builder(this)
+                            .setTitle("保存内容")
+                            .setMessage("原始笔记不存在，是否保存当前内容？")
+                            .setPositiveButton("保存", (dialog, which) -> saveNote())
+                            .setNegativeButton("不保存", (dialog, which) -> finish())
+                            .setNeutralButton("取消", null)
+                            .show();
                 });
             }
         }).start();

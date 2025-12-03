@@ -75,8 +75,9 @@
         <!-- 返回按钮 -->
         <ImageButton
             android:id="@+id/back_button"
-            android:layout_width="48dp"
+            android:layout_width="0dp"
             android:layout_height="48dp"
+            android:layout_weight="1"
             android:background="@drawable/circle_mask_transparent"
             android:contentDescription="@string/back"
             android:padding="8dp"
@@ -85,19 +86,14 @@
             android:src="@drawable/back"
             tools:ignore="ImageContrastCheck" />
 
-        <!-- 用于填充的视图 -->
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
         <!-- 添加标签按钮 -->
         <ImageButton
             android:id="@+id/add_tag_button"
-            android:layout_width="48dp"
+            android:layout_width="0dp"
             android:layout_height="48dp"
+            android:layout_weight="1"
             android:background="@drawable/circle_mask_transparent"
-            android:contentDescription="添加标签"
+            android:contentDescription="@string/add"
             android:padding="8dp"
             android:rotation="0"
             android:scaleType="centerInside"
@@ -107,14 +103,29 @@
         <!-- 编辑按钮 -->
         <ImageButton
             android:id="@+id/edit_note_button"
-            android:layout_width="48dp"
+            android:layout_width="0dp"
             android:layout_height="48dp"
+            android:layout_weight="1"
             android:background="@drawable/circle_mask_transparent"
-            android:contentDescription="编辑文章"
+            android:contentDescription="@string/write"
             android:padding="8dp"
             android:rotation="0"
             android:scaleType="centerInside"
             android:src="@drawable/add"
+            android:layout_marginStart="8dp" />
+
+        <!-- 删除按钮 -->
+        <ImageButton
+            android:id="@+id/delete_note_button"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/circle_mask_transparent"
+            android:contentDescription="@string/del"
+            android:padding="8dp"
+            android:rotation="0"
+            android:scaleType="centerInside"
+            android:src="@drawable/del"
             android:layout_marginStart="8dp" />
 
     </LinearLayout>

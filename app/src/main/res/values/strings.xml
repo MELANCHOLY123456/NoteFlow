@@ -24,6 +24,9 @@
     <string name="quote_of_the_day">一日不见，如隔秋水</string>
     <string name="back">返回主界面</string>
     <string name="topic">文章标题</string>
+    <string name="write">编辑文章</string>
+    <string name="add">添加标签</string>
+    <string name="del">删除文章</string>
 
 
 </resources>

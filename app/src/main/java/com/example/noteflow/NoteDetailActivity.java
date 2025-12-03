@@ -3,6 +3,7 @@ package com.example.noteflow;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ public class NoteDetailActivity extends AppCompatActivity {
         ImageButton backButton = findViewById(R.id.back_button);
         ImageButton editButton = findViewById(R.id.edit_note_button);
         ImageButton addTagButton = findViewById(R.id.add_tag_button); // 添加标签按钮
+        ImageButton deleteButton = findViewById(R.id.delete_note_button); // 删除按钮
         TextView articleTitle = findViewById(R.id.article_title);
         TextView articleTimestamp = findViewById(R.id.article_timestamp);
         TextView articleContent = findViewById(R.id.article_content);
@@ -76,12 +78,17 @@ public class NoteDetailActivity extends AppCompatActivity {
             editIntent.putExtra("content", content);
             editIntent.putExtra("editMode", true); // 标识是编辑模式
             startActivity(editIntent);
-            finish(); // 关闭当前详情页
+            // 不调用finish()，保持详情页在任务栈中，以便编辑完成后返回到详情页
         });
 
         // 设置添加标签按钮点击事件
         if (addTagButton != null) {
             addTagButton.setOnClickListener(v -> showAddTagDialog());
+        }
+
+        // 设置删除按钮点击事件
+        if (deleteButton != null) {
+            deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
         }
     }
 
@@ -213,5 +220,90 @@ public class NoteDetailActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+    
+    // 显示删除确认对话框
+    private void showDeleteConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("删除文章")
+                .setMessage("确定要删除这篇文章吗？此操作不可撤销。")
+                .setPositiveButton("确定", (dialog, which) -> deleteNote())
+                .setNegativeButton("取消", null)
+                .show();
+    }
+    
+    // 删除笔记
+    private void deleteNote() {
+        if (noteId == -1) {
+            Toast.makeText(this, "笔记ID无效", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                // 删除笔记与标签的关联
+                database.noteDao().deleteNoteTagsForNote(noteId);
+                
+                // 删除笔记本身
+                Note note = database.noteDao().getNoteById(noteId);
+                if (note != null) {
+                    database.noteDao().deleteNote(note);
+                    
+                    runOnUiThread(() -> {
+                        Toast.makeText(NoteDetailActivity.this, "文章删除成功", Toast.LENGTH_SHORT).show();
+                        finish(); // 返回到主页面
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        Toast.makeText(NoteDetailActivity.this, "笔记不存在", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(NoteDetailActivity.this, "删除失败: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 每次回到详情页时都刷新数据，以反映可能的更改
+        refreshNoteData();
+    }
+    
+    // 刷新笔记数据
+    private void refreshNoteData() {
+        if (noteId != -1) {
+            new Thread(() -> {
+                Note note = database.noteDao().getNoteById(noteId);
+                if (note != null) {
+                    runOnUiThread(() -> {
+                        // 更新UI
+                        TextView articleTitle = findViewById(R.id.article_title);
+                        TextView articleTimestamp = findViewById(R.id.article_timestamp);
+                        TextView articleContent = findViewById(R.id.article_content);
+                        
+                        if (articleTitle != null) {
+                            articleTitle.setText(note.getTitle());
+                        }
+                        if (articleTimestamp != null) {
+                            articleTimestamp.setText(note.getTimestamp());
+                        }
+                        if (articleContent != null) {
+                            articleContent.setText(note.getContent());
+                        }
+                        
+                        // 重新加载标签
+                        LinearLayout tagsContainer = findViewById(R.id.tags_container);
+                        if (tagsContainer != null) {
+                            loadAndDisplayTags(tagsContainer);
+                        }
+                    });
+                }
+            }).start();
+        }
     }
 }

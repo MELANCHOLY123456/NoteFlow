@@ -2,7 +2,6 @@ package com.example.noteflow;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,20 +45,12 @@ public class MainActivity extends AppCompatActivity {
         setupNotesList();
 
         // 设置菜单按钮点击事件
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(findViewById(R.id.drawer_menu));
-            }
-        });
+        menuButton.setOnClickListener(v -> drawerLayout.openDrawer(findViewById(R.id.drawer_menu)));
 
         // 设置新建文章按钮点击事件
-        addArticleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
-                startActivity(intent);
-            }
+        addArticleButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, NewNoteActivity.class);
+            startActivity(intent);
         });
 
         
@@ -80,9 +71,7 @@ public class MainActivity extends AppCompatActivity {
         // 在后台线程中执行数据库操作
         new Thread(() -> {
             List<NoteWithTags> notesWithTags = database.noteDao().getAllNotesWithTags();
-            runOnUiThread(() -> {
-                noteAdapter.updateNotes(notesWithTags);
-            });
+            runOnUiThread(() -> noteAdapter.updateNotes(notesWithTags));
         }).start();
     }
 
